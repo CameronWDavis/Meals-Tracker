@@ -8,17 +8,14 @@ enum Filter {
   vegan,
 }
 
-// 1. Change StateNotifier to Notifier
 class FiltersNotifier extends Notifier<Map<Filter, bool>> {
-  
-  // 2. Initial state moves from constructor to build()
   @override
   Map<Filter, bool> build() {
     return {
       Filter.glutenFree: false,
       Filter.lactoseFree: false,
       Filter.vegetarian: false,
-      Filter.vegan: false,
+      Filter.vegan: false
     };
   }
 
@@ -27,7 +24,6 @@ class FiltersNotifier extends Notifier<Map<Filter, bool>> {
   }
 
   void setFilter(Filter filter, bool isActive) {
-    // We still use the spread operator to ensure immutability
     state = {
       ...state,
       filter: isActive,
@@ -35,14 +31,10 @@ class FiltersNotifier extends Notifier<Map<Filter, bool>> {
   }
 }
 
-// 3. Change StateNotifierProvider to NotifierProvider
-final filtersProvider =
-    NotifierProvider<FiltersNotifier, Map<Filter, bool>>(() {
-  return FiltersNotifier();
-});
+final filtersProvider = NotifierProvider<FiltersNotifier, Map<Filter, bool>>(
+  () => FiltersNotifier(),
+);
 
-// 4. filteredMealsProvider remains a simple Provider, 
-// but it's now watching the updated Notifier
 final filteredMealsProvider = Provider((ref) {
   final meals = ref.watch(mealsProvider);
   final activeFilters = ref.watch(filtersProvider);
